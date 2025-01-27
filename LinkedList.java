@@ -174,20 +174,27 @@ public class LinkedList {
 	public void remove(Node node) {
 		//// Write your code here
 		if (node == null) {
-			return;
+			throw new NullPointerException();
 		}
+		boolean found = false;
 		if (first == node) {
 			first = first.next;
+			last = last == node ? null : last;
+			found = true;			
 		}
-		Node current = first;
-		while (current != null && current.next != node) {
-			current = current.next;
+		else {
+			Node current = first;
+			while (current != null && current.next != node) {
+				current = current.next;
+			}
+			if (current != null) {
+				current.next = node.next;
+				last = last == node ? current : last;
+				found = true;
+			}
 		}
-		if (current != null) {
-			current.next = node.next;
-		}
-		if (last == node) {
-			last = current;
+		if (found) {
+			size--;
 		}
 	}
 
