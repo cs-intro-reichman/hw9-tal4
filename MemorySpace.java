@@ -89,6 +89,9 @@ public class MemorySpace {
 	public void free(int address) {
 		//// Write your code here
 		ListIterator allocatedIter = allocatedList.iterator();
+		if (!allocatedIter.hasNext()) {
+			throw new IllegalArgumentException("index must be between 0 and size");			
+		}
 		while (allocatedIter.hasNext()) {
 			MemoryBlock currentBlock = allocatedIter.next();
 			if (currentBlock.baseAddress == address) {
@@ -96,6 +99,7 @@ public class MemorySpace {
 				allocatedList.remove(currentBlock);
 			}
 		}
+	
 	}
 	
 	/**
