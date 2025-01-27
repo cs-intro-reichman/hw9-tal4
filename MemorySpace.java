@@ -59,6 +59,22 @@ public class MemorySpace {
 	 */
 	public int malloc(int length) {		
 		//// Replace the following statement with your code
+		ListIterator freeIter = freeList.iterator();
+		while (freeIter.hasNext()) {
+			MemoryBlock freeBlock = freeIter.next();
+			if (freeBlock.length > length) {
+				MemoryBlock allocatedBlock = new MemoryBlock(freeBlock.baseAddress, length);
+				allocatedList.addLast(allocatedBlock);
+				freeBlock.baseAddress += length;
+				freeBlock.length -= length;
+				return allocatedBlock.baseAddress;
+			}
+			if (freeBlock.length == length) {
+				allocatedList.addLast(freeBlock);
+				freeList.remove(freeBlock);
+				return freeBlock.baseAddress;
+			}	
+		}
 		return -1;
 	}
 
@@ -72,6 +88,14 @@ public class MemorySpace {
 	 */
 	public void free(int address) {
 		//// Write your code here
+		ListIterator allocatedIter = allocatedList.iterator();
+		while (allocatedIter.hasNext()) {
+			MemoryBlock currentBlock = allocatedIter.next();
+			if (currentBlock.baseAddress == address) {
+				freeList.addLast(currentBlock);
+				allocatedList.remove(currentBlock);
+			}
+		}
 	}
 	
 	/**
