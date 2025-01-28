@@ -249,4 +249,33 @@ public class LinkedList {
 		}
 		return str;
 	}
+
+	/**
+	 * Sorts the list of memory blocks by base address.
+	 */
+	public void sortByBaseAddress() {
+		LinkedList sorted = new LinkedList();
+		while (size > 0) {
+			Node maxNode = getMaxBaseAdressNode();
+			remove(maxNode);
+			sorted.addFirst(maxNode.block);
+		}
+		first = sorted.first;
+		last = sorted.last;
+		size = sorted.size;
+	}
+
+	/**
+	 * Returns the node with the maximum base address in the list.
+	 */
+	private Node getMaxBaseAdressNode() {
+		Node current = first;
+		Node maxNode = first;
+		while (current != null) {
+			maxNode = current.block.baseAddress > maxNode.block.baseAddress ? current : maxNode;
+			current = current.next;
+		}
+		return maxNode;	
+	}
+
 }

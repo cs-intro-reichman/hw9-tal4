@@ -117,5 +117,27 @@ public class MemorySpace {
 	 */
 	public void defrag() {
 		//// Write your code here
+		freeList.sortByBaseAddress();
+		if (freeList.getSize() < 2) {
+			return;
+		}
+		ListIterator freeIter = freeList.iterator();
+		MemoryBlock currentBlock = freeIter.next();
+		MemoryBlock nextBlock = freeIter.next();
+		while (freeIter.hasNext()) {
+			if (currentBlock.baseAddress + currentBlock.length == nextBlock.baseAddress) {
+				currentBlock.length += nextBlock.length;
+				freeList.remove(nextBlock);
+				nextBlock = freeIter.next();
+			} else {
+				currentBlock = nextBlock;
+				nextBlock = freeIter.next();
+			}
+		}
+		if (currentBlock.baseAddress + currentBlock.length == nextBlock.baseAddress) {
+			currentBlock.length += nextBlock.length;
+			freeList.remove(nextBlock);
+		}
 	}
+
 }
